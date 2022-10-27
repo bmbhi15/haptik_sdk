@@ -1,0 +1,5 @@
+<resources>
+    <string name="haptik_base_url">https://staging.hellohaptik.com</string>
+    <string name="haptik_client_id">b751bbe0379c81ca61e8f2fd426a3b734d107470</string>
+    <string name="haptik_business_id">2377</string>
+</resources>
