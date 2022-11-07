@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
+import 'haptik_sdk.dart';
 import 'haptik_sdk_method_channel.dart';
 
 abstract class HaptikSdkPlatform extends PlatformInterface {
@@ -23,7 +23,17 @@ abstract class HaptikSdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> launchGuestConversation() {
+  Future<String?> launchGuestConversation(InitData initData) {
     throw UnimplementedError('launchGuestConversation() has not been implemented.');
+  }
+  Future<String?> launchCustomSignupConversation(SignupData signupData) {
+    throw UnimplementedError('launchCustomSignupConversation() has not been implemented.');
+  }
+  Future<String?> logout() {
+    throw UnimplementedError('logout() has not been implemented.');
+  }
+  Future<String?> setLaunchMessage(String message, bool hidden, bool skipMessage)
+  {
+    throw UnimplementedError('setLaunchMessage() has not been implemented.');
   }
 }

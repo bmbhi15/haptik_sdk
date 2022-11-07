@@ -18,6 +18,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _successState = 'Unknown';
   final _haptikSdkPlugin = HaptikSdk();
+  final initData=InitData();
 
   @override
   void initState() {
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
           String successState;
               try {
 
-                successState=await _haptikSdkPlugin.launchGuestConversation() ?? 'Unknown success state';
+                successState=await _haptikSdkPlugin.launchGuestConversation(initData) ?? 'Unknown success state';
               } on PlatformException {
                 successState = 'Failed to launch guest conversation';
               }

@@ -3,8 +3,15 @@ package com.haptik.haptik_sdk;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+
+import ai.haptik.android.wrapper.sdk.model.SignupData;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import androidx.annotation.NonNull;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ai.haptik.android.wrapper.sdk.HaptikSDK;
 import ai.haptik.android.wrapper.sdk.model.InitData;
@@ -29,6 +36,8 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
   private MethodChannel channel;
   private Context context;
   private Activity activity;
+  InitData initData = new InitData();
+  SignupData signupData = new SignupData();
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "haptik_sdk");
@@ -39,10 +48,43 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("launchGuestConversation")) {
-      launchGuestConversation();
+      HashMap<String,String> initDataMap= (HashMap<String, String>) call.arguments;
+      launchGuestConversation(initDataMap);
       result.success("Guest Conversation was launched");
-    } else {
-      result.notImplemented();
+    }
+
+    if(call.method.equals("launchCustomSignupConversation")){
+      HashMap<String,String> signupDataMap= (HashMap<String, String>) call.arguments;
+      launchCustomSignupConversation(signupDataMap);
+      result.success("Custom Conversation was launched");
+    }
+
+    if(call.method.equals("logout")){
+      HaptikSDK.INSTANCE.logout(context);
+      result.success("You were logged out successfully");
+    }
+
+    if(call.method.equals("setLaunchMessage"))
+    {
+      HashMap<String,String> argDataMap= (HashMap<String, String>) call.arguments;
+      boolean hidden=false;
+      if(argDataMap.get("hidden")=="true")
+      {
+        hidden=true;
+      }
+      boolean skipMessage=false;
+      if(argDataMap.get("skipMessage")=="true")
+      {
+        skipMessage=true;
+      }
+      //Documenatation says that setLaunchMessage takes only 2 arguments
+      HaptikSDK.INSTANCE.setLaunchMessage((String)argDataMap.get("message"),hidden);
+      result.success("Launch message was set");
+    }
+    if(call.method.equals("updateUserData"))
+    {
+      HashMap<String,String> userDataMap= (HashMap<String, String>) call.arguments;
+
     }
   }
 
@@ -50,12 +92,12 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
   }
-  public void launchGuestConversation(){
-    InitData initData = new InitData();
-    initData.setPrimaryColor("#420420");
-    initData.setComposerPlaceholder("Test message");
-    initData.setNoHeader(true);
-    initData.setInitializeLanguage("en");
+  public void launchGuestConversation(HashMap<String,String> initDataMap){
+    initData.setPrimaryColor((String)initDataMap.get("PrimaryColor"));
+    initData.setComposerPlaceholder((String)initDataMap.get("ComposerPlaceholder"));
+    boolean noHeader= initDataMap.get("NoHeader") == "true";
+    initData.setNoHeader(noHeader);
+    initData.setInitializeLanguage((String)initDataMap.get("InitializeLanguage"));
     HaptikSDK.INSTANCE.init(context, initData);
     HaptikSDK.INSTANCE.init(context, initData);
     HaptikSDK.INSTANCE.loadGuestConversation(new Function1<Response, Unit>() {
@@ -64,6 +106,16 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
         return null;
       }
     });
+  }
+  public void launchCustomSignupConversation(HashMap<String,String> signupDataMap){
+    signupData.setAuthCode((String)signupDataMap.get("AuthCode"));
+    signupData.setAuthId((String)signupDataMap.get("AuthId"));
+    signupData.setSignupType((String)signupDataMap.get("SignupType"));
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("custom-data-wrapper-one", "data-one");
+    jsonObject.put("custom-data-wrapper-two", "data-two");
+    signupData.setCustomData(jsonObject);
+    HaptikSDK.INSTANCE.loadConversation(signupData)
   }
 
   @Override
