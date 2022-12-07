@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'haptik_sdk.dart';
 import 'haptik_sdk_platform_interface.dart';
+import 'dart:convert';
 
 /// An implementation of [HaptikSdkPlatform] that uses method channels.
 class MethodChannelHaptikSdk extends HaptikSdkPlatform {
@@ -23,8 +24,22 @@ class MethodChannelHaptikSdk extends HaptikSdkPlatform {
   }
   @override
   Future<String?> launchCustomSignupConversation(SignupData signupData) async {
+    var customDataMap=signupData.setCustomData;
+    String customDataString="{";
+    if(customDataMap.containsKey("EMPTY_KEY"))
+      {
+        customDataString="NULL_VALUE";
+      }
+    else
+      {
+        customDataMap.forEach((key, value) {
+          customDataString+="${key} : ${value},";
+        });
+        customDataString=customDataString.substring(0,customDataString.length-2);
+        customDataString+="}";
+      }
     var signupDataMap={'AuthCode':signupData.setAuthCode, 'AuthId':signupData.setAuthId,
-      'SignupType': signupData.setSignupType};
+      'SignupType': signupData.setSignupType, 'CustomData': customDataString};
     final message = await methodChannel.invokeMethod<String>('launchCustomSignupConversation',signupDataMap);
     return message;
   }
@@ -51,5 +66,50 @@ class MethodChannelHaptikSdk extends HaptikSdkPlatform {
     final result = await methodChannel.invokeMethod<String>('setLaunchMessage',argData);
     return result;
   }
+  @override
+  Future<String?> updateUserData(var userData) async
+  {
+    var userDataJson=json.encode(userData);
+    final result = await methodChannel.invokeMethod<String>('updateUserData',userDataJson);
+    return result;
+  }
+  @override
+  Future<String?> destroy()async
+  {
+    final result = await methodChannel.invokeMethod<String>('destroy');
+    return result;
+  }
 
+  @override
+  Future<String?> getFormattedNotificationText(var data)async
+  {
+    final notificationText= await methodChannel.invokeMethod<String>('getFormattedNotificationText',data);
+    return notificationText;
+  }
+
+  @override
+  Future<String?>  handleNotification(var data)async
+  {
+    final result= await methodChannel.invokeMethod<String>('handleNotification',data);
+    return result;
+  }
+
+  @override
+  Future<bool?>  isHaptikNotification(var data)async
+  {
+    final result= await methodChannel.invokeMethod<String>('isHaptikNotification',data);
+    bool boolResult=false;
+    if(result=='true')
+      {
+        boolResult=true;
+      }
+    return boolResult;
+  }
+
+  @override
+  Future<String?>  setNotificationToken(String data)async
+  {
+    final result= await methodChannel.invokeMethod<String>('setNotificationToken',data);
+    return result;
+  }
 }

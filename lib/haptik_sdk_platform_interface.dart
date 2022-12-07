@@ -36,4 +36,31 @@ abstract class HaptikSdkPlatform extends PlatformInterface {
   {
     throw UnimplementedError('setLaunchMessage() has not been implemented.');
   }
+  Future<String?> updateUserData(var userData)
+  {
+    throw UnimplementedError('updateUserData() has not been implemented');
+  }
+  Future<String?> destroy()
+  {
+    throw UnimplementedError('destroy() has not been implemented');
+  }
+  Future<String?> getFormattedNotificationText(var data)
+  {
+    throw UnimplementedError('getFormattedNotificationText() has not been implemented');
+  }
+
+  Future<String?> handleNotification(var data)
+  {
+    throw UnimplementedError('handleNotification() has not been implemented');
+  }
+
+  Future<bool?> isHaptikNotification(var data)
+  {
+    throw UnimplementedError('isHaptikNotification() has not been implemented');
+  }
+
+  Future<String?> setNotificationToken(String data)
+  {
+    throw UnimplementedError('setNotificationToken() has not been implemented');
+  }
 }

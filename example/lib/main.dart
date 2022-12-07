@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   String _successState = 'Unknown';
   final _haptikSdkPlugin = HaptikSdk();
   final initData=InitData();
+  final signupData=SignupData();
 
   @override
   void initState() {
@@ -37,6 +38,10 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     String successState;
     successState='SDK is initialized';
+    initData.setPrimaryColor="#00FF00";
+    initData.setComposerPlaceholder="flutter_plugin_demo";
+    initData.setInitializeLanguage="hi";
+    initData.setNoHeader=false;
     // try {
     //
     //   successState=await _haptikSdkPlugin.initializeSDK() ?? 'SDK was not initialized';

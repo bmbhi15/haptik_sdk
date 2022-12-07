@@ -8,6 +8,7 @@ import ai.haptik.android.wrapper.sdk.model.SignupData;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import androidx.annotation.NonNull;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -47,6 +48,9 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+
+
+
     if (call.method.equals("launchGuestConversation")) {
       HashMap<String,String> initDataMap= (HashMap<String, String>) call.arguments;
       launchGuestConversation(initDataMap);
@@ -55,7 +59,11 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
 
     if(call.method.equals("launchCustomSignupConversation")){
       HashMap<String,String> signupDataMap= (HashMap<String, String>) call.arguments;
-      launchCustomSignupConversation(signupDataMap);
+      try {
+        launchCustomSignupConversation(signupDataMap);
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
       result.success("Custom Conversation was launched");
     }
 
@@ -83,9 +91,46 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
     }
     if(call.method.equals("updateUserData"))
     {
-      HashMap<String,String> userDataMap= (HashMap<String, String>) call.arguments;
-
+        JSONObject userDataJSONObj=(JSONObject) call.arguments;
+        HaptikSDK.INSTANCE.updateUserData(userDataJSONObj);
+        result.success("User Data was updated");
     }
+    if(call.method.equals("destroy"))
+    {
+      HaptikSDK.INSTANCE.destroy();
+      result.success("Haptik INSTANCE was successfully destroyed");
+    }
+    if(call.method.equals("getFormattedNotificationText"))
+    {
+      HashMap<String,String> map=(HashMap<String, String>) call.arguments;
+      String notificationText=HaptikSDK.INSTANCE.getFormattedNotificationText(map,context);
+      result.success(notificationText);
+    }
+//    if(call.method.equals("handleNotification"))
+//    {
+//      HashMap<String,String> map=(HashMap<String, String>) call.arguments;
+//      HaptikSDK.INSTANCE.handleNotification(context,map,R.mipmap.ic_launcher);
+//      result.success("Notifications were handled");
+//    }
+    if(call.method.equals("isHaptikNotification"))
+    {
+      HashMap<String,String> map=(HashMap<String, String>) call.arguments;
+      boolean res=HaptikSDK.INSTANCE.isHaptikNotification(map);
+      String resString="false";
+      if(res==true)
+      {
+        resString="true";
+      }
+      result.success(resString);
+    }
+    if(call.method.equals("setNotificationToken"))
+    {
+      String s=(String) call.arguments;
+      HaptikSDK.INSTANCE.setNotificationToken(context,s);
+
+      result.success("Notification Token was successfully set");
+    }
+
   }
 
   @Override
@@ -98,7 +143,14 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
     boolean noHeader= initDataMap.get("NoHeader") == "true";
     initData.setNoHeader(noHeader);
     initData.setInitializeLanguage((String)initDataMap.get("InitializeLanguage"));
-    HaptikSDK.INSTANCE.init(context, initData);
+//    if(initDataMap.get("CustomCSS")!="NULL")
+//    {
+//      initData.setCustomCss((String)initDataMap.get("CustomCSS"));
+//    }
+//    initData.setPrimaryColor("#420420");
+//    initData.setComposerPlaceholder("Type Message....");
+//    initData.setNoHeader(true);
+//    initData.setInitializeLanguage("en");
     HaptikSDK.INSTANCE.init(context, initData);
     HaptikSDK.INSTANCE.loadGuestConversation(new Function1<Response, Unit>() {
       @Override
@@ -107,15 +159,48 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
       }
     });
   }
-  public void launchCustomSignupConversation(HashMap<String,String> signupDataMap){
+  public void launchCustomSignupConversation(HashMap<String,String> signupDataMap) throws JSONException {
+    InitData initData = new InitData();
+    initData.setPrimaryColor("#420420");
+    initData.setComposerPlaceholder("Test message");
+    initData.setNoHeader(true);
+    initData.setInitializeLanguage("en");
+    HaptikSDK.INSTANCE.init(context, initData);
     signupData.setAuthCode((String)signupDataMap.get("AuthCode"));
     signupData.setAuthId((String)signupDataMap.get("AuthId"));
     signupData.setSignupType((String)signupDataMap.get("SignupType"));
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("custom-data-wrapper-one", "data-one");
-    jsonObject.put("custom-data-wrapper-two", "data-two");
-    signupData.setCustomData(jsonObject);
-    HaptikSDK.INSTANCE.loadConversation(signupData)
+    String customData= (String)signupDataMap.get("CustomData");
+    if(customData.equals("NULL_VALUE"))
+    {
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("custom-data-wrapper-one", "data-one");
+      jsonObject.put("custom-data-wrapper-two", "data-two");
+      signupData.setCustomData(jsonObject);
+
+    }
+    else
+    {
+      Map<String, String> myMap = new HashMap<String, String>();
+
+      String[] pairs = customData.split(",");
+
+      for (int i=0;i<pairs.length;i++) {
+        String pair = pairs[i];
+        String[] keyValue = pair.split(":");
+        myMap.put(keyValue[0], String.valueOf(keyValue[1]));
+      }
+
+      JSONObject jsonObject = new JSONObject(myMap);
+      signupData.setCustomData(jsonObject);
+
+    }
+
+    HaptikSDK.INSTANCE.loadConversation(signupData,new Function1<Response, Unit>() {
+      @Override
+      public Unit invoke(Response response) {
+        return null;
+      }
+    });
   }
 
   @Override

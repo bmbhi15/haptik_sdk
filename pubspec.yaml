@@ -1,6 +1,6 @@
 name: haptik_sdk
 description: Flutter plugin for HAPTIK's android SDK
-version: 0.0.1
+version: 0.0.6
 homepage:
 
 environment:
