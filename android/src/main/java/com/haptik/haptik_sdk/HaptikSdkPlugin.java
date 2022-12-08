@@ -206,6 +206,8 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
   @Override
   public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
     // TODO: your plugin is now attached to an Activity
+    // New pull request
+
     activity = activityPluginBinding.getActivity();
   }
 
