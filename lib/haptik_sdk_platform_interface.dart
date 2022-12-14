@@ -19,8 +19,30 @@ abstract class HaptikSdkPlatform extends PlatformInterface {
     {
       setNoHeaderString="true";
     }
+    String setBotTypeString="false";
+    if(initData.setBotType==true)
+      {
+        setBotTypeString="true";
+      }
+    String setEnableTypingSuggestionsString="false";
+    if(initData.setEnableTypingSuggestions==true)
+      {
+        setEnableTypingSuggestionsString="true";
+      }
+    String setEnableUserFeedbackString="false";
+    if(initData.setEnableUserFeedback==true)
+      {
+        setEnableUserFeedbackString="true";
+      }
+    String setIgnoreStorageString="false";
+    if(initData.setIgnoreStorage==true)
+      {
+        setIgnoreStorageString="true";
+      }
     var initDataMap={'PrimaryColor':initData.setPrimaryColor, 'ComposerPlaceholder':initData.setComposerPlaceholder,
-      'NoHeader':setNoHeaderString,'InitializeLanguage': initData.setInitializeLanguage};
+      'NoHeader':setNoHeaderString,'InitializeLanguage': initData.setInitializeLanguage, 'setBase_url':initData.setBase_url,
+    'setBotType':setBotTypeString, 'setEnableTypingSuggestions':setEnableTypingSuggestionsString,
+      'setEnableUserFeedback':setEnableUserFeedbackString, 'setIgnoreStorage':setIgnoreStorageString};
     final message = await methodChannel.invokeMethod<String>('launchGuestConversation',initDataMap);
     return message;
   }

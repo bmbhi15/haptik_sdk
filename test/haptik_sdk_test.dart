@@ -9,7 +9,7 @@ class MockHaptikSdkPlatform
 
   @override
   Future<String?> launchGuestConversation() => Future.value('42');
-}
+}flu
 
 void main() {
   final HaptikSdkPlatform initialPlatform = HaptikSdkPlatform.instance;
