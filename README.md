@@ -2,8 +2,10 @@
 
 This is an implementation of the HAPTIK's SDK library in Flutter. 
 ## Getting Started
-###Installation of SDK
-####Prerequisites
+
+##Installation of SDK
+
+###Prerequisites
 To Integrate Haptik SDK, you must obtain the following credentials to get started:
 
 1. Client ID/Account ID (Required): Unique Haptik identification number associated with your account.
@@ -13,7 +15,9 @@ To Integrate Haptik SDK, you must obtain the following credentials to get starte
 5. Auth ID:authentication type to be used for user registration. Required only for custom signup.
 
 ####Add Haptik SDK in your flutter project
+
 #####Depend on it
+
 Run this command with flutter:
 ```
 flutter pub add haptik_sdk
@@ -25,12 +29,14 @@ haptik_sdk: ^0.0.6
 ```
 Alternatively, your editor might support flutter pub get. Check the docs for your editor to learn more.
 #####Import it
+
 Now in your Dart code, you can use:
 ```
 import 'package:haptik_sdk/haptik_sdk.dart';
 ```
 
 ###Setting up credentials and environment for Flutter plugin
+
 The Haptik SDK will take in the required credentials in your flutter project through the android part. You'll have to add to
 in the strings.xml folder which resides in the following path:
 android/app/main/res/values
