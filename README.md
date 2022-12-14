@@ -49,6 +49,16 @@ In strings.xml :
     <string name="haptik_business_id">PROVIDED_BUSINESS_ID</string>
 </resources>
 ```
+### How to publish this flutter plugin
+All flutter plugins can be published to pub.dev. Inside your flutter plugin file, run the following commands in the terminal:
+To check if the package is ready to be published:
+```
+flutter pub publish --dry-run
+```
+If all the checks are passed, run this command to publish the plugin to pub.dev:
+```
+flutter pub publish
+```
 This project is a starting point for a Flutter
 [plug-in package](https://flutter.dev/developing-packages/),
 a specialized package that includes platform-specific implementation code for
