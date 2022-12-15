@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:haptik_sdk/InitData.dart';
+import 'package:haptik_sdk/SignupData.dart';
 import 'package:flutter/services.dart';
 import 'package:haptik_sdk/haptik_sdk.dart';
 

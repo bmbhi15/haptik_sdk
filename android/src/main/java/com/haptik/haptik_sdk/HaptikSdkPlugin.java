@@ -143,14 +143,20 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
     boolean noHeader= initDataMap.get("NoHeader") == "true";
     initData.setNoHeader(noHeader);
     initData.setInitializeLanguage((String)initDataMap.get("InitializeLanguage"));
-//    if(initDataMap.get("CustomCSS")!="NULL")
-//    {
-//      initData.setCustomCss((String)initDataMap.get("CustomCSS"));
-//    }
-//    initData.setPrimaryColor("#420420");
-//    initData.setComposerPlaceholder("Type Message....");
-//    initData.setNoHeader(true);
-//    initData.setInitializeLanguage("en");
+    String baseUrl=(String)initDataMap.get("setBase_url");
+
+    if(!(baseUrl.equals("NULL_VALUE")))
+    {
+      initData.setBase_url(baseUrl);
+    }
+    boolean botType=initDataMap.get("setBotType")=="true";
+    initData.setBotType(botType);
+    boolean typingSuggestion=initDataMap.get("setEnableTypingSuggestions")=="true";
+    initData.setEnableTypingSuggestions(typingSuggestion);
+    boolean EnableUserFeedback=initDataMap.get("setEnableUserFeedback")=="true";
+    initData.setEnableUserFeedback(EnableUserFeedback);
+    boolean IgnoreStorage=initDataMap.get("setIgnoreStorage")=="true";
+    initData.setIgnoreStorage(IgnoreStorage);
     HaptikSDK.INSTANCE.init(context, initData);
     HaptikSDK.INSTANCE.loadGuestConversation(new Function1<Response, Unit>() {
       @Override
@@ -206,6 +212,8 @@ public class HaptikSdkPlugin implements FlutterPlugin, MethodCallHandler, Activi
   @Override
   public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
     // TODO: your plugin is now attached to an Activity
+    // New pull request
+
     activity = activityPluginBinding.getActivity();
   }
 

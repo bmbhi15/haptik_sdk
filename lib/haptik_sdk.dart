@@ -1,58 +1,46 @@
 
 import 'haptik_sdk_platform_interface.dart';
-
+import 'InitData.dart';
+import 'SignupData.dart';
 class HaptikSdk {
   Future<String?> launchGuestConversation(InitData initData) {
-    return HaptikSdkPlatform.instance.launchGuestConversation(initData);
+    return HaptikSdkPlatform.launchGuestConversation(initData);
   }
   Future<String?> launchCustomSignupConversation(SignupData signupData)
   {
-    return HaptikSdkPlatform.instance.launchCustomSignupConversation(signupData);
+    return HaptikSdkPlatform.launchCustomSignupConversation(signupData);
   }
   Future<String?> logout()
   {
-    return HaptikSdkPlatform.instance.logout();
+    return HaptikSdkPlatform.logout();
   }
   Future<String?> setLaunchMessage(String message, bool hidden, bool skipMessage)
   {
-    return HaptikSdkPlatform.instance.setLaunchMessage(message,hidden,skipMessage);
+    return HaptikSdkPlatform.setLaunchMessage(message,hidden,skipMessage);
   }
   Future<String?> updateUserData(var userData)
   {
-    return HaptikSdkPlatform.instance.updateUserData(userData);
+    return HaptikSdkPlatform.updateUserData(userData);
   }
   Future<String?> destroy()
   {
-    return HaptikSdkPlatform.instance.destroy();
+    return HaptikSdkPlatform.destroy();
   }
   Future<String?> getFormattedNotificationText(var data)
   {
-    return HaptikSdkPlatform.instance.getFormattedNotificationText(data);
+    return HaptikSdkPlatform.getFormattedNotificationText(data);
   }
   Future<String?> handleNotification(var data)
   {
-    return HaptikSdkPlatform.instance.handleNotification(data);
+    return HaptikSdkPlatform.handleNotification(data);
   }
 
   Future<bool?> isHaptikNotification(var data)
   {
-    return HaptikSdkPlatform.instance.isHaptikNotification(data);
+    return HaptikSdkPlatform.isHaptikNotification(data);
   }
   Future<String?> setNotificationToken(String data)
   {
-    return HaptikSdkPlatform.instance.setNotificationToken(data);
+    return HaptikSdkPlatform.setNotificationToken(data);
   }
-}
-class InitData{
-  String setPrimaryColor="#420420";
-  String setComposerPlaceholder="Type Message....";
-  bool setNoHeader=true;
-  String setInitializeLanguage="en";
-}
-class SignupData{
-
-  String setAuthCode="YOUR_AUTH_CODE";
-  String setAuthId="YOUR_AUTH_ID";
-  String setSignupType="third_party";
-  var setCustomData={"EMPTY_KEY":"EMPTY_VALUE"};
 }
